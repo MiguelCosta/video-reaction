@@ -1,0 +1,43 @@
+# ── Reactions (user-recorded MP4/WebM files) ──
+reactions/*.mp4
+reactions/*.webm
+reactions-export/
+
+# ── Environment / secrets ──
+.env
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+pip-wheel-metadata/
+.venv/
+venv/
+env/
+ENV/
+
+# ── Docker ──
+*.dockerenv
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editors / IDEs ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.orig
+
+# ── Logs ──
+*.log

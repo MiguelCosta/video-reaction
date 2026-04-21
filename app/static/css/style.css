@@ -1,0 +1,295 @@
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --rose:     #c9184a;
+  --blush:    #ffb3c6;
+  --cream:    #fff0f3;
+  --gold:     #d4a017;
+  --gold-lt:  #f7e89e;
+  --text:     #3d1a24;
+  --white:    #ffffff;
+  --shadow:   rgba(61, 26, 36, 0.15);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Lato', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── Floating petal animation ── */
+.petals {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  top: -60px;
+  font-size: 1.6rem;
+  animation: fall linear infinite;
+  opacity: 0.7;
+}
+
+.petal:nth-child(1)  { left:  5%; animation-duration: 8s;  animation-delay: 0s; }
+.petal:nth-child(2)  { left: 15%; animation-duration: 11s; animation-delay: 2s; }
+.petal:nth-child(3)  { left: 27%; animation-duration: 9s;  animation-delay: 4s; }
+.petal:nth-child(4)  { left: 40%; animation-duration: 12s; animation-delay: 1s; }
+.petal:nth-child(5)  { left: 55%; animation-duration: 7s;  animation-delay: 3s; }
+.petal:nth-child(6)  { left: 67%; animation-duration: 10s; animation-delay: 5s; }
+.petal:nth-child(7)  { left: 78%; animation-duration: 9s;  animation-delay: 0.5s; }
+.petal:nth-child(8)  { left: 90%; animation-duration: 13s; animation-delay: 2.5s; }
+
+@keyframes fall {
+  0%   { transform: translateY(-60px) rotate(0deg);   opacity: 0.8; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+/* ── Screens ── */
+.screen {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem 1rem;
+}
+
+.screen.active { display: flex; }
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--blush);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px var(--shadow);
+  padding: 3rem 2.5rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+
+.card.wide { max-width: 680px; }
+
+/* ── Ring icon ── */
+.ring-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 6px var(--blush));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+/* ── Typography ── */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--rose);
+  margin-bottom: 0.4rem;
+}
+
+.subtitle {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #5a3040;
+  margin-bottom: 1.8rem;
+}
+
+.description strong { color: var(--rose); }
+.description em     { color: var(--gold); }
+
+/* ── Buttons ── */
+.btn-primary, .btn-secondary {
+  display: inline-block;
+  padding: 0.85rem 2.2rem;
+  border-radius: 50px;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--rose), #ff4d6d);
+  color: var(--white);
+  box-shadow: 0 4px 18px rgba(201, 24, 74, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(201, 24, 74, 0.45);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--rose);
+  border: 2px solid var(--rose);
+  margin-top: 1rem;
+}
+
+.btn-secondary:hover {
+  background: var(--rose);
+  color: var(--white);
+}
+
+/* ── Error message ── */
+.error {
+  color: #b91c1c;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
+
+.hidden { display: none !important; }
+
+/* ── Webcam preview (ready screen) ── */
+.preview-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid var(--blush);
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+#preview {
+  display: block;
+  width: 320px;
+  max-width: 100%;
+  border-radius: 10px;
+  background: #000;
+}
+
+/* ── Watching screen ── */
+#screen-watch {
+  background: linear-gradient(160deg, #1a0010 0%, #3d0020 100%);
+  padding: 1.5rem 1rem 2rem;
+  gap: 1rem;
+}
+
+.watch-title {
+  color: var(--gold-lt);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.stage {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.yt-wrap {
+  flex: 1 1 560px;
+  max-width: 720px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+  background: #000;
+  aspect-ratio: 16 / 9;
+}
+
+.yt-wrap iframe,
+#yt-player {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cam-wrap {
+  position: relative;
+  flex: 0 0 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid var(--gold);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  background: #000;
+}
+
+#cam-live {
+  display: block;
+  width: 240px;
+  border-radius: 10px;
+  background: #000;
+}
+
+/* ── REC badge ── */
+.rec-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(180, 0, 0, 0.85);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  animation: blink 1.2s step-start infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ── Thank-you filename ── */
+.filename {
+  font-size: 0.8rem;
+  color: #9a6070;
+  margin-top: 0.8rem;
+  word-break: break-all;
+}
+
+/* ── Decorative divider ── */
+.card::before {
+  content: '✦ ✦ ✦';
+  display: block;
+  color: var(--gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.6em;
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  .card { padding: 2rem 1.2rem; }
+  #preview { width: 100%; }
+  .yt-wrap { flex: 1 1 100%; }
+  .cam-wrap { flex: 0 0 160px; }
+  #cam-live { width: 160px; }
+}

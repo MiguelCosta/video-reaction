@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ana &amp; Sérgio 💍</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- Floating petals decoration -->
+  <div class="petals" aria-hidden="true">
+    <span class="petal">🌸</span><span class="petal">🌸</span>
+    <span class="petal">🌸</span><span class="petal">🌸</span>
+    <span class="petal">🌸</span><span class="petal">🌸</span>
+    <span class="petal">🌸</span><span class="petal">🌸</span>
+  </div>
+
+  <!-- ── SCREEN 1: Permission request ── -->
+  <section id="screen-permission" class="screen active">
+    <div class="card">
+      <div class="ring-icon">💍</div>
+      <h1>Ana &amp; Sérgio</h1>
+      <p class="subtitle">Um momento especial aguarda-te…</p>
+      <p class="description">
+        Convidamo-te a testemunhar uma pedido de casamento único.<br />
+        Para guardar a <em>tua</em> reação, precisamos de aceder à tua
+        <strong>câmara</strong> e ao teu <strong>microfone</strong>.
+      </p>
+      <button id="btn-allow" class="btn-primary">
+        🎥 Permitir câmara &amp; microfone
+      </button>
+      <p id="permission-error" class="error hidden"></p>
+    </div>
+  </section>
+
+  <!-- ── SCREEN 2: Ready to watch ── -->
+  <section id="screen-ready" class="screen">
+    <div class="card wide">
+      <div class="ring-icon">💍</div>
+      <h1>Estás pronto!</h1>
+      <p class="description">
+        A tua câmara está ligada. Carrega em <strong>Iniciar</strong> para ver o vídeo e
+        começar a gravar a tua reação. A gravação para automaticamente quando
+        o vídeo terminar.
+      </p>
+      <div class="preview-wrap">
+        <video id="preview" autoplay muted playsinline></video>
+        <span class="rec-badge hidden" id="rec-badge">● REC</span>
+      </div>
+      <button id="btn-start" class="btn-primary">▶ Iniciar</button>
+    </div>
+  </section>
+
+  <!-- ── SCREEN 3: Watching + recording ── -->
+  <section id="screen-watch" class="screen">
+    <h1 class="watch-title">Ana &amp; Sérgio 💍</h1>
+    <div class="stage">
+      <div class="yt-wrap">
+        <div id="yt-player"></div>
+      </div>
+      <div class="cam-wrap">
+        <video id="cam-live" autoplay muted playsinline></video>
+        <span class="rec-badge" id="rec-badge-watch">● REC</span>
+      </div>
+    </div>
+    <button id="btn-stop" class="btn-secondary">⏹ Parar &amp; guardar reação</button>
+  </section>
+
+  <!-- ── SCREEN 4: Thank you ── -->
+  <section id="screen-thankyou" class="screen">
+    <div class="card">
+      <div class="ring-icon">💖</div>
+      <h1>Obrigado!</h1>
+      <p class="description">
+        A tua reação foi guardada.<br />
+        Ana e Sérgio vão guardar cada sorriso, cada lágrima, cada emoção. 🥂
+      </p>
+      <p id="saved-filename" class="filename"></p>
+    </div>
+  </section>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    window.YOUTUBE_VIDEO_ID = "{{ youtube_video_id }}";
+  </script>
+  <script src="/static/js/recorder.js"></script>
+</body>
+</html>

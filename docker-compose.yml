@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - YOUTUBE_VIDEO_ID=${YOUTUBE_VIDEO_ID:-dQw4w9WgXcQ}
+    volumes:
+      - ./reactions:/app/reactions
