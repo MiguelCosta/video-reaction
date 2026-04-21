@@ -101,12 +101,16 @@
     });
 
     mediaRecorder.addEventListener('stop', uploadReaction);
-    mediaRecorder.start(1000); // collect chunks every second
+    // No timeslice: record as a single continuous blob.
+    // Using start(N) creates WebM cluster boundaries every N ms which
+    // causes audio gaps/discontinuities when the chunks are concatenated.
+    mediaRecorder.start();
   }
 
   function stopAndSave() {
     if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.requestData(); // flush any buffered data before stopping
       mediaRecorder.stop();
     }
   }
