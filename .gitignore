@@ -1,5 +1,6 @@
-# ── Reactions (user-recorded WebM files) ──
+# ── Reactions (user-recorded files) ──
 reactions/*.webm
+reactions/*.mkv
 reactions-export/
 
 # ── Environment / secrets ──
