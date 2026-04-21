@@ -1,5 +1,4 @@
 import os
-import subprocess
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -31,30 +30,10 @@ def upload():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     unique = uuid.uuid4().hex[:6]
     webm_path = REACTIONS_DIR / f"reaction_{timestamp}_{unique}.webm"
-    mp4_path = REACTIONS_DIR / f"reaction_{timestamp}_{unique}.mp4"
 
     blob.save(str(webm_path))
 
-    try:
-        result = subprocess.run(
-            [
-                "ffmpeg", "-y",
-                "-i", str(webm_path),
-                "-c:v", "libx264",
-                "-c:a", "aac",
-                "-movflags", "+faststart",
-                str(mp4_path),
-            ],
-            capture_output=True,
-            timeout=120,
-        )
-        if result.returncode != 0:
-            app.logger.error("ffmpeg error: %s", result.stderr.decode())
-            return jsonify({"error": "Conversion failed"}), 500
-    finally:
-        webm_path.unlink(missing_ok=True)
-
-    return jsonify({"filename": mp4_path.name}), 201
+    return jsonify({"filename": webm_path.name}), 201
 
 
 if __name__ == "__main__":

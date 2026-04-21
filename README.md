@@ -120,14 +120,21 @@ video-reaction/
 
 ---
 
-## Accessing Saved Reactions
+## Recording Format
 
-Reactions are saved directly into the `./reactions/` folder in the project directory via a bind mount. They persist across container restarts and are immediately accessible on your machine — no export step needed.
+Reactions are saved as **WebM** files (VP8/VP9 video + Opus audio) — the browser's native recording format.
 
+| | WebM | MP4 |
+|---|---|---|
+| Quality | ✅ Lossless (no re-encoding) | ⚠️ Re-encoded |
+| Processing | ✅ Instant (no conversion) | ⚠️ CPU-intensive |
+| Chrome / Firefox / Edge | ✅ | ✅ |
+| VLC / modern players | ✅ | ✅ |
+| QuickTime (older Mac) | ⚠️ Needs codec | ✅ |
+
+WebM plays natively in all modern browsers and VLC. If you need MP4 you can convert locally with:
 ```bash
-ls reactions/
-# reaction_20260421_105500_abc123.mp4
-# reaction_20260421_110200_def456.mp4
+ffmpeg -i reaction_file.webm -c:v libx264 -c:a aac output.mp4
 ```
 
 ---

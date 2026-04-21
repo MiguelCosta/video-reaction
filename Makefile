@@ -33,10 +33,10 @@ restart: ## Restart the website
 logs: ## Tail application logs
 	$(COMPOSE) logs -f web
 
-clean: ## Stop containers and delete saved reactions (⚠ deletes ./reactions/*.mp4)
+clean: ## Stop containers and delete saved reactions (⚠ deletes ./reactions/*.webm)
 	$(COMPOSE) down
-	@rm -f reactions/*.mp4 reactions/*.webm
-	@echo "  🗑  Reactions deleted."
+	@rm -f reactions/*.webm
+	@echo "  🗑  Reactions eliminadas."
 
 reactions: ## List saved reaction files in ./reactions/
 	@ls -lh reactions/*.mp4 2>/dev/null || echo "  No reactions saved yet."

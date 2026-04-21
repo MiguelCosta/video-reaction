@@ -1,5 +1,4 @@
-# ── Reactions (user-recorded MP4/WebM files) ──
-reactions/*.mp4
+# ── Reactions (user-recorded WebM files) ──
 reactions/*.webm
 reactions-export/
 

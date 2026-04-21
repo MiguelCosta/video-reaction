@@ -37,7 +37,22 @@
     btnAllow.disabled = true;
     permError.classList.add('hidden');
     try {
-      mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100,
+          channelCount: 2,
+        },
+      });
+
+      // Verify audio tracks were granted
+      const audioTracks = mediaStream.getAudioTracks();
+      if (audioTracks.length === 0) {
+        throw new Error('Nenhuma faixa de áudio encontrada no stream');
+      }
+
       previewEl.srcObject = mediaStream;
       camLiveEl.srcObject = mediaStream;
       showScreen('ready');
@@ -69,6 +84,7 @@
     const candidates = [
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=h264,opus',
       'video/webm',
     ];
     return candidates.find(m => MediaRecorder.isTypeSupported(m)) || '';
@@ -77,7 +93,7 @@
   function startRecording() {
     recordedChunks = [];
     const mimeType = getBestMimeType();
-    const options  = mimeType ? { mimeType } : {};
+    const options  = mimeType ? { mimeType, audioBitsPerSecond: 128000 } : { audioBitsPerSecond: 128000 };
     mediaRecorder  = new MediaRecorder(mediaStream, options);
 
     mediaRecorder.addEventListener('dataavailable', e => {
