@@ -42,8 +42,8 @@
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 44100,
-          channelCount: 2,
+          // sampleRate and channelCount omitted — iOS Safari throws
+          // OverconstrainedError if the device doesn't support exact values
         },
       });
 
@@ -82,10 +82,15 @@
   // ── MediaRecorder ──
   function getBestMimeType() {
     const candidates = [
+      // Desktop browsers (Chrome, Firefox, Edge) — WebM preferred
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
       'video/webm;codecs=h264,opus',
       'video/webm',
+      // iOS Safari (14.3+) — only supports MP4/H.264/AAC
+      'video/mp4;codecs=avc1,mp4a.40.2',
+      'video/mp4;codecs=avc1',
+      'video/mp4',
     ];
     return candidates.find(m => MediaRecorder.isTypeSupported(m)) || '';
   }
@@ -110,7 +115,9 @@
   function stopAndSave() {
     if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      mediaRecorder.requestData(); // flush any buffered data before stopping
+      try {
+        mediaRecorder.requestData(); // flush buffered data (not supported on iOS — ignored)
+      } catch (_) {}
       mediaRecorder.stop();
     }
   }

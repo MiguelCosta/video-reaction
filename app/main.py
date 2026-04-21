@@ -30,10 +30,19 @@ def upload():
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     unique = uuid.uuid4().hex[:6]
-    webm_path = REACTIONS_DIR / f"reaction_{timestamp}_{unique}.webm"
-    mkv_path  = REACTIONS_DIR / f"reaction_{timestamp}_{unique}.mkv"
 
-    blob.save(str(webm_path))
+    original_ext = Path(blob.filename).suffix.lower() or '.webm'
+    input_path = REACTIONS_DIR / f"reaction_{timestamp}_{unique}{original_ext}"
+    blob.save(str(input_path))
+
+    # iOS Safari records MP4 (H.264/AAC) — already well-formed, save as-is.
+    # Desktop browsers record WebM — remux to MKV with ffmpeg to fix Chrome's
+    # broken Opus audio timestamps (stream copy: lossless and near-instant).
+    if original_ext == '.mp4':
+        return jsonify({"filename": input_path.name}), 201
+
+    webm_path = input_path
+    mkv_path  = REACTIONS_DIR / f"reaction_{timestamp}_{unique}.mkv"
 
     # Remux with ffmpeg using stream copy (no re-encoding).
     # Chrome's MediaRecorder produces WebM with broken Opus audio timestamps.

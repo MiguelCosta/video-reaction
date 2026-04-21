@@ -1,6 +1,7 @@
 # ── Reactions (user-recorded files) ──
 reactions/*.webm
 reactions/*.mkv
+reactions/*.mp4
 reactions-export/
 
 # ── Environment / secrets ──
