@@ -26,6 +26,14 @@
   let recordedChunks = [];
   let ytPlayer      = null;
 
+  // Resolved when the YouTube IFrame API is ready
+  let ytApiResolve  = null;
+  const ytApiReady  = new Promise(resolve => { ytApiResolve = resolve; });
+
+  // Resolved when the user clicks "Iniciar" and the watch screen is visible
+  let ytStartResolve = null;
+  const ytStartReady = new Promise(resolve => { ytStartResolve = resolve; });
+
   // ── Screen helper ──
   function showScreen(name) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
@@ -67,13 +75,9 @@
   // ── Step 2: Start watching ──
   btnStart.addEventListener('click', () => {
     showScreen('watch');
-    // Small delay so the YouTube iframe is visible/attached before play
-    setTimeout(() => {
-      startRecording();
-      if (ytPlayer && ytPlayer.playVideo) {
-        ytPlayer.playVideo();
-      }
-    }, 500);
+    startRecording();
+    // Signal that the watch screen is now visible and recording has started
+    ytStartResolve();
   });
 
   // ── Step 3: Manual stop ──
@@ -113,7 +117,7 @@
   }
 
   function stopAndSave() {
-    if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+    try { if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo(); } catch (_) {}
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
       try {
         mediaRecorder.requestData(); // flush buffered data (not supported on iOS — ignored)
@@ -152,7 +156,9 @@
   }
 
   // ── YouTube IFrame API ──
-  // Called by YouTube script when API is ready
+  // Called by YouTube script when API is ready. We wait for BOTH the API to be
+  // ready AND the watch screen to be visible before creating the player and
+  // playing — this eliminates the race condition in both directions.
   window.onYouTubeIframeAPIReady = function () {
     ytPlayer = new YT.Player('yt-player', {
       videoId: window.YOUTUBE_VIDEO_ID,
@@ -164,10 +170,19 @@
         fs:             1,
       },
       events: {
+        onReady:       onPlayerReady,
         onStateChange: onPlayerStateChange,
       },
     });
+    ytApiResolve();
   };
+
+  // Only play once both the player is ready AND the user has clicked "Iniciar"
+  function onPlayerReady() {
+    ytStartReady.then(() => {
+      ytPlayer.playVideo();
+    });
+  }
 
   function onPlayerStateChange(event) {
     // YT.PlayerState.ENDED = 0
